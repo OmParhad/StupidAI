@@ -2,8 +2,33 @@
   box-sizing: border-box;
 }
 
+/* =========================================
+   THEME VARIABLES
+========================================= */
+
+:root {
+  --background: #ffffff;
+  --text: #1f1f1f;
+  --secondary-text: #666666;
+  --border: #e5e5e5;
+  --input-border: #cccccc;
+  --card-background: #ffffff;
+  --button-background: #1f1f1f;
+  --button-text: #ffffff;
+  --user-message: #f0f0f0;
+  --assistant-message: #fff7d6;
+  --assistant-border: #f1df8c;
+  --example-hover: #f5f5f5;
+  --shadow: rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================
+   BASE
+========================================= */
+
 body {
   margin: 0;
+
   font-family:
     Inter,
     system-ui,
@@ -11,8 +36,13 @@ body {
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  background: #ffffff;
-  color: #1f1f1f;
+
+  background: var(--background);
+  color: var(--text);
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 button,
@@ -20,21 +50,66 @@ textarea {
   font: inherit;
 }
 
+/* =========================================
+   APP
+========================================= */
+
 .app {
   min-height: 100vh;
+
   display: flex;
   flex-direction: column;
+
+  background: var(--background);
+  color: var(--text);
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
-/* Header */
+/* =========================================
+   DARK THEME
+========================================= */
+
+.app.dark {
+  --background: #181818;
+  --text: #eeeeee;
+  --secondary-text: #a0a0a0;
+  --border: #333333;
+  --input-border: #444444;
+  --card-background: #222222;
+  --button-background: #eeeeee;
+  --button-text: #181818;
+  --user-message: #303030;
+  --assistant-message: #3a351f;
+  --assistant-border: #665b2b;
+  --example-hover: #303030;
+  --shadow: rgba(0, 0, 0, 0.35);
+}
+
+/* =========================================
+   HEADER
+========================================= */
 
 .header {
   height: 64px;
-  border-bottom: 1px solid #e5e5e5;
+
+  border-bottom: 1px solid var(--border);
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   padding: 0 24px;
+
+  background: var(--background);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .logo {
@@ -44,25 +119,68 @@ textarea {
 
 .status {
   font-size: 13px;
-  color: #666;
+  color: var(--secondary-text);
 }
 
-/* Chat */
+/* =========================================
+   THEME TOGGLE
+========================================= */
+
+.theme-toggle {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--border);
+  border-radius: 50%;
+
+  background: var(--card-background);
+  color: var(--text);
+
+  cursor: pointer;
+
+  font-size: 17px;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+/* =========================================
+   CHAT
+========================================= */
 
 .chat-container {
   flex: 1;
+
   width: 100%;
   max-width: 850px;
+
   margin: 0 auto;
+
   padding: 40px 24px 160px;
 }
 
+/* =========================================
+   WELCOME
+========================================= */
+
 .welcome {
   min-height: 60vh;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   text-align: center;
 }
 
@@ -77,7 +195,7 @@ textarea {
 }
 
 .welcome p {
-  color: #666;
+  color: var(--secondary-text);
   margin-top: 10px;
 }
 
@@ -86,22 +204,34 @@ textarea {
   gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
+
   margin-top: 30px;
 }
 
 .examples button {
-  border: 1px solid #ddd;
-  background: white;
+  border: 1px solid var(--border);
+
+  background: var(--card-background);
+  color: var(--text);
+
   border-radius: 12px;
+
   padding: 10px 14px;
+
   cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .examples button:hover {
-  background: #f5f5f5;
+  background: var(--example-hover);
 }
 
-/* Messages */
+/* =========================================
+   MESSAGES
+========================================= */
 
 .messages {
   display: flex;
@@ -122,69 +252,107 @@ textarea {
 .message-label {
   font-size: 12px;
   font-weight: 600;
-  color: #777;
+  color: var(--secondary-text);
 }
 
 .message-content {
   max-width: 75%;
+
   padding: 12px 16px;
+
   border-radius: 16px;
+
   line-height: 1.5;
 }
 
 .user .message-content {
-  background: #f0f0f0;
+  background: var(--user-message);
+  color: var(--text);
 }
 
 .assistant .message-content {
-  background: #fff7d6;
-  border: 1px solid #f1df8c;
+  background: var(--assistant-message);
+
+  border: 1px solid var(--assistant-border);
+
+  color: var(--text);
 }
 
-/* Input */
+/* =========================================
+   INPUT
+========================================= */
 
 .input-area {
   position: fixed;
+
   bottom: 0;
   left: 0;
   right: 0;
+
   background: linear-gradient(
     transparent,
-    white 25%
+    var(--background) 25%
   );
+
   padding: 30px 20px 15px;
 }
 
 .input-box {
   max-width: 850px;
+
   margin: 0 auto;
+
   display: flex;
   align-items: flex-end;
+
   gap: 10px;
+
   padding: 10px;
-  border: 1px solid #ccc;
+
+  border: 1px solid var(--input-border);
+
   border-radius: 18px;
-  background: white;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+
+  background: var(--card-background);
+
+  box-shadow: 0 4px 20px var(--shadow);
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 textarea {
   flex: 1;
+
   border: none;
   outline: none;
   resize: none;
+
   padding: 8px;
+
   max-height: 120px;
+
+  background: transparent;
+  color: var(--text);
+}
+
+textarea::placeholder {
+  color: var(--secondary-text);
 }
 
 .input-box button {
   width: 38px;
   height: 38px;
+
   border: none;
   border-radius: 50%;
-  background: #1f1f1f;
-  color: white;
+
+  background: var(--button-background);
+  color: var(--button-text);
+
   font-size: 20px;
+
   cursor: pointer;
 }
 
@@ -193,9 +361,629 @@ textarea {
   cursor: not-allowed;
 }
 
+/* =========================================
+   DISCLAIMER / LEGAL LINKS
+========================================= */
+
 .disclaimer {
   text-align: center;
+
   font-size: 11px;
-  color: #888;
+
+  color: var(--secondary-text);
+
   margin: 8px 0 0;
+}
+
+.disclaimer p {
+  margin: 0;
+}
+
+.legal-links {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 6px;
+}
+
+.legal-link {
+  border: none;
+
+  background: transparent;
+
+  color: var(--secondary-text);
+
+  font-size: 11px;
+
+  padding: 0;
+  margin: 0;
+
+  cursor: pointer;
+
+  text-decoration: underline;
+}
+
+.legal-link:hover {
+  color: var(--text);
+}
+
+.legal-links span {
+  color: var(--secondary-text);
+  font-size: 11px;
+}
+
+/* =========================================
+   ABOUT PAGE
+========================================= */
+
+.about-page {
+  min-height: 100vh;
+
+  padding: 40px 24px 80px;
+
+  background: var(--background);
+  color: var(--text);
+}
+
+.about-container {
+  width: 100%;
+  max-width: 850px;
+
+  margin: 0 auto;
+}
+
+/* About Header */
+
+.about-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 70px;
+}
+
+.about-label {
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  color: var(--secondary-text);
+}
+
+/* About Hero */
+
+.about-hero {
+  text-align: center;
+
+  margin-bottom: 90px;
+}
+
+.about-icon {
+  font-size: 70px;
+  margin-bottom: 25px;
+}
+
+.about-hero h1 {
+  margin: 0;
+
+  font-size: 52px;
+  line-height: 1.1;
+
+  letter-spacing: -2px;
+}
+
+.about-hero h1 span {
+  display: block;
+}
+
+.about-subtitle {
+  margin: 20px auto 0;
+
+  max-width: 550px;
+
+  font-size: 18px;
+
+  color: var(--secondary-text);
+
+  line-height: 1.6;
+}
+
+/* About Sections */
+
+.about-section {
+  margin-bottom: 80px;
+}
+
+.about-section h2 {
+  margin: 0 0 20px;
+
+  font-size: 28px;
+
+  letter-spacing: -0.5px;
+}
+
+.about-section > p {
+  max-width: 720px;
+
+  color: var(--secondary-text);
+
+  line-height: 1.75;
+
+  font-size: 16px;
+}
+
+/* About Quote */
+
+.about-section blockquote {
+  margin: 30px 0;
+
+  padding: 22px 24px;
+
+  border-left: 3px solid var(--text);
+
+  background: var(--card-background);
+
+  border-radius: 0 12px 12px 0;
+
+  font-size: 20px;
+
+  line-height: 1.5;
+
+  font-style: italic;
+}
+
+/* About Flow */
+
+.about-flow {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  margin-top: 30px;
+}
+
+.about-step {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 20px;
+
+  padding: 22px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 16px;
+
+  background: var(--card-background);
+
+  transition: transform 0.2s ease;
+}
+
+.about-step:hover {
+  transform: translateY(-2px);
+}
+
+.step-number {
+  min-width: 34px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  color: var(--secondary-text);
+
+  padding-top: 4px;
+}
+
+.about-step h3 {
+  margin: 0 0 6px;
+
+  font-size: 17px;
+}
+
+.about-step p {
+  margin: 0;
+
+  color: var(--secondary-text);
+
+  line-height: 1.5;
+
+  font-size: 14px;
+}
+
+.flow-arrow {
+  text-align: center;
+
+  color: var(--secondary-text);
+
+  font-size: 18px;
+}
+
+.final-step {
+  border-style: dashed;
+}
+
+/* Technology Cards */
+
+.tech-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 14px;
+
+  margin-top: 30px;
+}
+
+.tech-card {
+  padding: 25px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 16px;
+
+  background: var(--card-background);
+}
+
+.tech-card > span {
+  font-size: 26px;
+}
+
+.tech-card h3 {
+  margin: 15px 0 8px;
+
+  font-size: 17px;
+}
+
+.tech-card p {
+  margin: 0;
+
+  color: var(--secondary-text);
+
+  line-height: 1.6;
+
+  font-size: 14px;
+}
+
+/* Philosophy */
+
+.about-philosophy {
+  text-align: center;
+
+  padding: 55px 30px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 22px;
+
+  background: var(--card-background);
+}
+
+.philosophy-icon {
+  font-size: 40px;
+
+  margin-bottom: 15px;
+}
+
+.about-philosophy h2 {
+  margin-bottom: 15px;
+}
+
+.about-philosophy p {
+  margin: 8px auto;
+
+  max-width: 600px;
+}
+
+/* About Footer */
+
+.about-footer {
+  padding-top: 30px;
+
+  text-align: center;
+
+  border-top: 1px solid var(--border);
+}
+
+.about-footer p {
+  margin-bottom: 15px;
+
+  font-size: 12px;
+
+  color: var(--secondary-text);
+}
+
+.footer-back {
+  margin-top: 5px;
+}
+
+/* Back Button */
+
+.back-button {
+  border: 1px solid var(--border);
+
+  background: transparent;
+
+  color: var(--text);
+
+  border-radius: 10px;
+
+  padding: 9px 14px;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+.back-button:hover {
+  background: var(--card-background);
+}
+
+/* =========================================
+   LEGAL / DISCLAIMER PAGE
+========================================= */
+
+.legal-page {
+  min-height: 100vh;
+
+  padding: 40px 24px 80px;
+
+  background: var(--background);
+
+  color: var(--text);
+}
+
+.legal-container {
+  width: 100%;
+
+  max-width: 800px;
+
+  margin: 0 auto;
+}
+
+/* Legal Header */
+
+.legal-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 60px;
+}
+
+.legal-label {
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+
+  color: var(--secondary-text);
+}
+
+/* Legal Hero */
+
+.legal-hero {
+  text-align: center;
+
+  margin-bottom: 55px;
+}
+
+.legal-icon {
+  font-size: 55px;
+
+  margin-bottom: 20px;
+}
+
+.legal-hero h1 {
+  margin: 0;
+
+  font-size: 42px;
+
+  line-height: 1.15;
+
+  letter-spacing: -1px;
+}
+
+.legal-hero p {
+  max-width: 600px;
+
+  margin: 16px auto 0;
+
+  color: var(--secondary-text);
+
+  line-height: 1.6;
+}
+
+/* Legal Warning */
+
+.legal-warning {
+  margin-bottom: 55px;
+
+  padding: 22px 24px;
+
+  border: 1px solid var(--border);
+
+  border-radius: 16px;
+
+  background: var(--card-background);
+}
+
+.legal-warning strong {
+  display: block;
+
+  margin-bottom: 8px;
+}
+
+.legal-warning p {
+  margin: 0;
+
+  color: var(--secondary-text);
+
+  line-height: 1.65;
+}
+
+/* Legal Sections */
+
+.legal-section {
+  margin-bottom: 48px;
+}
+
+.legal-section h2 {
+  margin: 0 0 15px;
+
+  font-size: 22px;
+}
+
+.legal-section p {
+  margin: 0 0 14px;
+
+  color: var(--secondary-text);
+
+  line-height: 1.75;
+}
+
+.legal-section ul {
+  margin: 15px 0 20px;
+
+  padding-left: 25px;
+
+  color: var(--secondary-text);
+
+  line-height: 1.9;
+}
+
+/* Legal Final */
+
+.legal-final {
+  margin-top: 65px;
+
+  padding: 45px 30px;
+
+  text-align: center;
+
+  border: 1px solid var(--border);
+
+  border-radius: 20px;
+
+  background: var(--card-background);
+}
+
+.legal-final-icon {
+  font-size: 40px;
+
+  margin-bottom: 15px;
+}
+
+.legal-final h2 {
+  margin: 0 0 12px;
+
+  font-size: 24px;
+}
+
+.legal-final p {
+  max-width: 580px;
+
+  margin: 0 auto;
+
+  color: var(--secondary-text);
+
+  line-height: 1.7;
+}
+
+/* Legal Footer */
+
+.legal-footer {
+  margin-top: 55px;
+
+  padding-top: 25px;
+
+  border-top: 1px solid var(--border);
+
+  text-align: center;
+}
+
+.legal-footer p {
+  margin-bottom: 15px;
+
+  font-size: 12px;
+
+  color: var(--secondary-text);
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 650px) {
+  .about-page {
+    padding: 25px 18px 60px;
+  }
+
+  .about-header {
+    margin-bottom: 50px;
+  }
+
+  .about-hero {
+    margin-bottom: 65px;
+  }
+
+  .about-hero h1 {
+    font-size: 40px;
+  }
+
+  .about-subtitle {
+    font-size: 16px;
+  }
+
+  .about-section {
+    margin-bottom: 60px;
+  }
+
+  .about-section h2 {
+    font-size: 24px;
+  }
+
+  .tech-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-step {
+    padding: 18px;
+  }
+
+  .legal-links {
+    gap: 8px;
+  }
+
+  .legal-link {
+    font-size: 11px;
+  }
+
+  .legal-page {
+    padding: 25px 18px 60px;
+  }
+
+  .legal-header {
+    margin-bottom: 45px;
+  }
+
+  .legal-hero h1 {
+    font-size: 34px;
+  }
+
+  .legal-section {
+    margin-bottom: 40px;
+  }
+
+  .legal-final {
+    padding: 35px 20px;
+  }
 }

@@ -1,16 +1,45 @@
-import { useState } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 import "./index.css";
+
+import About from "./Legal/About";
+import Disclaimer from "./Legal/Disclamier";
+import License from "./Legal/Licenses";
 
 type Message = {
   role: "user" | "assistant";
   content: string;
 };
 
+type Theme = "light" | "dark";
+
 function App() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [showAbout, setShowAbout] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [showLicense, setShowLicense] = useState(false);
+
+  const [theme, setTheme] = useState<Theme>(() => {
+    const savedTheme = localStorage.getItem("stupid-gpt-theme");
+
+    return savedTheme === "dark" ? "dark" : "light";
+  });
+
+  // Save theme
+  useEffect(() => {
+    localStorage.setItem("stupid-gpt-theme", theme);
+  }, [theme]);
+
+  // Toggle light / dark mode
+  const toggleTheme = () => {
+    setTheme((currentTheme) =>
+      currentTheme === "light" ? "dark" : "light"
+    );
+  };
+
+  // Send message to backend
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
 
@@ -24,15 +53,18 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: input,
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:5000/api/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: input,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to get response");
@@ -45,15 +77,19 @@ function App() {
         content: data.answer,
       };
 
-      setMessages((prev) => [...prev, assistantMessage]);
+      setMessages((prev) => [
+        ...prev,
+        assistantMessage,
+      ]);
     } catch (error) {
-      console.error(error);
+      console.error("Chat error:", error);
 
       setMessages((prev) => [
         ...prev,
         {
           role: "assistant",
-          content: "The stupidity engine exploded. 💥🧠",
+          content:
+            "The stupidity engine exploded. 💥🧠",
         },
       ]);
     } finally {
@@ -61,42 +97,136 @@ function App() {
     }
   };
 
+  // Enter = send
+  // Shift + Enter = new line
   const handleKeyDown = (
-    event: React.KeyboardEvent<HTMLTextAreaElement>
+    event: KeyboardEvent<HTMLTextAreaElement>
   ) => {
-    if (event.key === "Enter" && !event.shiftKey) {
+    if (
+      event.key === "Enter" &&
+      !event.shiftKey
+    ) {
       event.preventDefault();
       sendMessage();
     }
   };
 
+  /*
+   * ==========================================
+   * ABOUT PAGE
+   * ==========================================
+   */
+
+  if (showAbout) {
+    return (
+      <div className={`app ${theme}`}>
+        <About
+          onBack={() => setShowAbout(false)}
+        />
+      </div>
+    );
+  }
+
+  /*
+   * ==========================================
+   * DISCLAIMER PAGE
+   * ==========================================
+   */
+
+  if (showDisclaimer) {
+    return (
+      <div className={`app ${theme}`}>
+        <Disclaimer
+          onBack={() => setShowDisclaimer(false)}
+        />
+      </div>
+    );
+  }
+
+  /*
+   * ==========================================
+   * LICENSE PAGE
+   * ==========================================
+   */
+
+  if (showLicense) {
+    return (
+      <div className={`app ${theme}`}>
+        <License
+          onBack={() => setShowLicense(false)}
+        />
+      </div>
+    );
+  }
+
+  /*
+   * ==========================================
+   * MAIN APP
+   * ==========================================
+   */
+
   return (
-    <div className="app">
+    <div className={`app ${theme}`}>
+
+      {/* Header */}
+
       <header className="header">
-        <div className="logo">
-          🧠 Stupid GPT
+
+        <div className="header-left">
+          <div className="logo">
+            Stupid AI
+          </div>
         </div>
 
-        <div className="status">
-          ● Stupidity Engine Online
-        </div>
+        <button
+          className="theme-toggle"
+          onClick={toggleTheme}
+          aria-label={`Switch to ${
+            theme === "light"
+              ? "dark"
+              : "light"
+          } mode`}
+          title={`Switch to ${
+            theme === "light"
+              ? "dark"
+              : "light"
+          } mode`}
+        >
+          {theme === "light"
+            ? "🌙"
+            : "☀️"}
+        </button>
+
       </header>
 
-      <main className="chat-container">
-        {messages.length === 0 ? (
-          <div className="welcome">
-            <div className="welcome-icon">🍌</div>
+      {/* Chat */}
 
-            <h1>Welcome to Stupid GPT</h1>
+      <main className="chat-container">
+
+        {messages.length === 0 ? (
+
+          <div className="welcome">
+
+            <div className="welcome-icon">
+              🍌
+            </div>
+
+            <h1>
+              Welcome to Stupid AI
+            </h1>
 
             <p>
-              Ask anything. Receive something confidently stupid.
+              Ask anything. Receive something
+              confidently stupid.
             </p>
 
             <div className="examples">
+
               <button
                 onClick={() =>
-                  setInput("What keeps the doctor away?")
+                  setInput(
+                    "What keeps the doctor away?"
+                  )
                 }
               >
                 What keeps the doctor away?
@@ -104,7 +234,9 @@ function App() {
 
               <button
                 onClick={() =>
-                  setInput("Why is the sky blue?")
+                  setInput(
+                    "Why is the sky blue?"
+                  )
                 }
               >
                 Why is the sky blue?
@@ -112,52 +244,78 @@ function App() {
 
               <button
                 onClick={() =>
-                  setInput("What is a computer?")
+                  setInput(
+                    "What is a computer?"
+                  )
                 }
               >
                 What is a computer?
               </button>
+
             </div>
+
           </div>
+
         ) : (
+
           <div className="messages">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`message ${message.role}`}
-              >
-                <div className="message-label">
-                  {message.role === "user"
-                    ? "You"
-                    : "Stupid GPT"}
+
+            {messages.map(
+              (message, index) => (
+
+                <div
+                  key={index}
+                  className={`message ${message.role}`}
+                >
+
+                  <div className="message-label">
+                    {message.role === "user"
+                      ? "You"
+                      : "Stupid AI"}
+                  </div>
+
+                  <div className="message-content">
+                    {message.content}
+                  </div>
+
                 </div>
 
-                <div className="message-content">
-                  {message.content}
-                </div>
-              </div>
-            ))}
+              )
+            )}
 
             {loading && (
+
               <div className="message assistant">
+
                 <div className="message-label">
-                  Stupid GPT
+                  Stupid AI
                 </div>
 
                 <div className="message-content">
                   Thinking incorrectly... 🤔
                 </div>
+
               </div>
+
             )}
+
           </div>
+
         )}
+
       </main>
 
+      {/* Input */}
+
       <div className="input-area">
+
         <div className="input-box">
+
           <textarea
             value={input}
-            onChange={(event) => setInput(event.target.value)}
+            onChange={(event) =>
+              setInput(event.target.value)
+            }
             onKeyDown={handleKeyDown}
             placeholder="Ask something... preferably something complicated."
             rows={1}
@@ -166,16 +324,77 @@ function App() {
 
           <button
             onClick={sendMessage}
-            disabled={!input.trim() || loading}
+            disabled={
+              !input.trim() || loading
+            }
           >
             ↑
           </button>
+
         </div>
 
-        <p className="disclaimer">
-          Stupid GPT may confidently provide answers that are wrong.
-        </p>
+        {/* Disclaimer / Legal Links */}
+
+        <div className="disclaimer">
+
+          <p>
+            Stupid AI intentionally generates
+            absurd and incorrect answers.
+            Do not rely on its responses for
+            important decisions.
+          </p>
+
+          <div className="legal-links">
+
+            <span>
+              © 2026 Om Parhad
+            </span>
+
+            <span>·</span>
+
+            <span>
+              v1.0.0
+            </span>
+
+            <span>·</span>
+
+            <button
+              className="legal-link"
+              onClick={() =>
+                setShowAbout(true)
+              }
+            >
+              About
+            </button>
+
+            <span>·</span>
+
+            <button
+              className="legal-link"
+              onClick={() =>
+                setShowDisclaimer(true)
+              }
+            >
+              Disclaimer & Legal Notice
+            </button>
+
+            <span>·</span>
+
+            <button
+              className="legal-link"
+              onClick={() =>
+                setShowLicense(true)
+              }
+            >
+              MIT License
+            </button>
+
+          </div>
+
+        </div>
+
       </div>
+
     </div>
   );
 }
