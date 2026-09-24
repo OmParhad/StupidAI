@@ -1,10 +1,10 @@
-import { groq } from "../config/Groq.js";
+import { groq, model } from "../config/groq.js";
 
 export async function generateStupidAnswer(
   question: string
 ): Promise<string> {
   const response = await groq.chat.completions.create({
-    model: "llama-3.1-8b-instant",
+    model,
 
     messages: [
       {
@@ -26,6 +26,7 @@ Rules:
 6. Make the answer funny.
 7. Never provide dangerous instructions.
 8. Never encourage real-world harm.
+9.dont add much answers concenrinig Bakery and Sweets
 
 Examples:
 

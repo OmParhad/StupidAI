@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch --import=dotenv/config src/server.ts"
-    
+    "dev": "tsx watch --import=dotenv/config src/server.ts",
+    "build": "tsc",
+    "start": "node --import=dotenv/config dist/server.js",
+    "typecheck": "tsc --noEmit"
   },
   "type": "module",
   "keywords": [],
